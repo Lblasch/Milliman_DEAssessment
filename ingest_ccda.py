@@ -25,7 +25,7 @@ def process_medication(file):
     MemberID = filename.split('_')[0]
     DocumentID = filename.split('_')[1]
     tree = etree.parse(file)
-    xpath_value_medication = '//*[contains(@codeSystemName, "NDC")]'
+    xpath_value_medication = '//*[contains(@codeSystemName, "RxNorm")]'
     meds= tree.xpath(xpath_value_medication)
     rxnormcodes=[]
     array_meds=[]
@@ -39,13 +39,13 @@ def process_medication(file):
 
 def transform_to_df(list):
     # FUTURE - Update to parse all of the relevant fields instead of using placeholders
-    if len(list) == [[]]:
-        list = [['', '', '', '']]
+    # Handle empty lists
+    list = [sublist for sublist in list if sublist]
     cols = ['code', 'code_system', 'MemberID', 'DocumentID']
     df = spark.createDataFrame(list).toDF(*cols)
     df= df.withColumn('SUPPLEMENTAL_DATA',f.lit(True))\
-          .withColumn('ONSET_DATE',f.lit('2020-01-01'))\
-          .withColumn('RESOLVED_DATE',f.lit('2030-01-01')).where(f.col('code')!='')
+          .withColumn('ONSET_DATE',f.lit('2020-01-01').cast('timestamp'))\
+          .withColumn('RESOLVED_DATE',f.lit('2030-01-01').cast('timestamp')).where(f.col('code')!='')
     df= df.select('MemberID',
                   'DocumentID',
                   'ONSET_DATE',
@@ -57,15 +57,14 @@ def transform_to_df(list):
     return df
 
 def transform_to_df_med(list):
-    if len(list) == [[]]:
-        list =[['', '', '', '']]
     # FUTURE - Update to parse all of the relevant fields instead of using placeholders
     cols = ['code', 'code_system', 'MemberID', 'DocumentID']
+    # Handle empty lists
+    list = [sublist for sublist in list if sublist]
     df = spark.createDataFrame(list).toDF(*cols)
     df= df.withColumn('SUPPLEMENTAL_DATA',f.lit(True)).\
         withColumn('DaysSupply',f.lit(0)).\
-        withColumn('QuantityDispensed',f.lit(0)).\
-        withColumn('RESOLVED_DATE',f.lit('2030-01-01')).where(f.col('code')!='')
+        withColumn('QuantityDispensed',f.lit(0))
     df = df.select('MemberID',
                    'DocumentID',
                    'DaysSupply',
@@ -104,7 +103,6 @@ if __name__ == "__main__":
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
         full_path = '/mnt/c/Users/Lauren/Desktop/Lauren/Milliman/data/raw/CCDA_downloads/' + filename
-        print(full_path)
         if filename.endswith("_masked.xml") :
             icd_list = process_problem(full_path)
             icddata.extend(icd_list)

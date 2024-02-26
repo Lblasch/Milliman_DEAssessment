@@ -48,7 +48,8 @@ class Stage_ICD:
            .withColumn('SUPPLEMENTAL_DATA', f.lit(False))\
            .drop('ICDVersion')\
            .withColumnRenamed('FROMDATE','ONSET_DATE')\
-           .withColumn('RESOLVED_DATE', f.lit(''))
+           .withColumn('RESOLVED_DATE', f.lit('2030-01-01').cast('timestamp'))
+        # FUTURE CONSIDERATIONS - ADD Primary flag
         df = df.filter(f.col('CODE').isNotNull())
         return df
 

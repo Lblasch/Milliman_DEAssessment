@@ -8,23 +8,23 @@ The pipeline takes the raw data and transforms it into the necessary schema in s
 
 Problems
 root
- |-- MemberID: string (nullable = true)
- |-- ClaimID: string (nullable = true)
- |-- CODE: string (nullable = true)
- |-- CODE_SYSTEM: string (nullable = true)
- |-- ONSET_DATE: date (nullable = true)
- |-- RESOLVED_DATE: string (nullable = true)
- |-- SUPPLEMENTAL_DATA: boolean (nullable = true)
+- MemberID: string (nullable = true)
+- ClaimID: string (nullable = true)
+- CODE: string (nullable = true)
+- CODE_SYSTEM: string (nullable = true)
+- ONSET_DATE: date (nullable = true)
+- RESOLVED_DATE: date (nullable = true)
+- SUPPLEMENTAL_DATA: boolean (nullable = true)
 
 Medication
 root
- |-- MEMBERID: string (nullable = true)
- |-- CLAIMID: string (nullable = true)
- |-- DaysSupply: integer (nullable = true)
- |-- QuantityDispensed: double (nullable = true)
- |-- CODE: string (nullable = true)
- |-- CODE_SYSTEM: string (nullable = true)
- |-- SUPPLEMENTAL_DATA: boolean (nullable = true)
+- MEMBERID: string (nullable = true)
+- CLAIMID: string (nullable = true)
+- DaysSupply: integer (nullable = true)
+- QuantityDispensed: double (nullable = true)
+- CODE: string (nullable = true)
+- CODE_SYSTEM: string (nullable = true)
+- SUPPLEMENTAL_DATA: boolean (nullable = true)
 
 
 Run Steps:
@@ -37,7 +37,7 @@ python3 ./Milliman_DEAssessment/main.py  -s ./data/staging/ -cl ./data/raw/data_
 
 
 Future Improvements:
-- Automate presigned url download. It was giving me permission errors and required me to click on the browset to download.
 - Parse the full ccda files. Initially I only had time to pull a few fields. 
 - Add CCDA Staging step as a class and add to main script so it can be run all at once
 - Add merge to the stage -> final step
+- Write to parquet and add partitioning

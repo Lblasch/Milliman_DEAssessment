@@ -18,7 +18,6 @@ class Final_ICD:
         staging_prob = self.staging_folder + 'staging_prob.csv'
         self.claims_staging = self.spark.read.option("inferSchema",True).csv(staging_prob, header=True, sep=',').drop('FROMDATE')
 
-
     def create_final_df(self):
         self.read_ccda_staging()
         self.read_claims_staging()
