@@ -4,7 +4,7 @@
 /data/staging/ - after initial transforations
 /data/final/ - final data files
 
-The pipeline takes the raw data and transforms it into the necessary schema in staging. Then the data is merge to the final data folder.
+The pipeline takes the raw data (claims and ccda) and transforms it into staging. Then the data is merged to the final data folder.
 
 Problems
 root
@@ -12,8 +12,8 @@ root
 - ClaimID: string (nullable = true)
 - CODE: string (nullable = true)
 - CODE_SYSTEM: string (nullable = true)
-- ONSET_DATE: date (nullable = true)
-- RESOLVED_DATE: date (nullable = true)
+- ONSET_DATE: timestamp (nullable = true)
+- RESOLVED_DATE: timestamp (nullable = true)
 - SUPPLEMENTAL_DATA: boolean (nullable = true)
 
 Medication
@@ -39,5 +39,5 @@ python3 ./Milliman_DEAssessment/main.py  -s ./data/staging/ -cl ./data/raw/data_
 Future Improvements:
 - Parse the full ccda files. Initially I only had time to pull a few fields. 
 - Add CCDA Staging step as a class and add to main script so it can be run all at once
-- Add merge to the stage -> final step
+- Support Incremental updates by adding merge to the stage -> final step
 - Write to parquet and add partitioning
