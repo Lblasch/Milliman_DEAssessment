@@ -1,6 +1,9 @@
 import requests
 
-with open('./DataEngineer_Exam/ccda_pre_signed_urls.csv', 'r') as urls:
+# Future update, add as an input
+url_path = './DataEngineer_Exam/ccda_pre_signed_urls.csv'
+
+with open(url_path, 'r') as urls:
     for presigned_url in urls:
         test = presigned_url.split('?')[0]
         file_name = test.split('/')[-1]
